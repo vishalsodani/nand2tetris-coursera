@@ -73,5 +73,5 @@ CHIP ALU {
    
    // find if out is negative binary number and use for ng
    Not16(in[0..7]=orout1, in[8..15]=orout2, out[0]=negchk, out[1]=negchk1, out[2]=negchk2, out[3]=negchk3, out[4]=negchk4, out[5]=negchk5, out[6]=negchk6, out[7]=negchk7, out[8]=negchk8, out[9]=negchk9, out[10]=negchk10, out[11]=negchk11, out[12]=negchk12, out[13]=negchk13, out[14]=negchk14, out[15]=negchk15);
-   Mux(a=true, b=false, sel=negchk, out=ng);
+   Mux(a=true, b=false, sel=negchk15, out=ng);
 }

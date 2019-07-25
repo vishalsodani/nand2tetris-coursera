@@ -43,4 +43,35 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   Mux16(a=x, b[0..15]=false, sel=zx, out=outx);
+   Not16(in=outx, out=notx);
+   Mux16(a=outx, b=notx, sel=nx, out=outnx);
+
+   Mux16(a=y, b[0..15]=false, sel=zy, out=outy);
+   Not16(in=outy, out=noty);
+   Mux16(a=outy, b=noty, sel=ny, out=outny);
+
+   Add16(a=outnx, b=outny, out=outaddxy);
+   And16(a=outnx, b=outny, out=outandxy);
+
+   //f selector which gives out
+   Mux16(a=outandxy, b=outaddxy, sel=f, out=out1);
+
+   //negate the output if no is 1
+   Not16(in=out1, out=outnot);
+   Mux16(a=out1, b=outnot, sel=no, out[0..7]=orout1, out[8..15]=orout2);
+
+   // find if out is 0 binary number and use for zr
+   Or8Way(in=orout1, out=or1);
+   Or8Way(in=orout2, out=or2);
+   Or(a=or1, b=or2, out=or3);
+   Not(in=or3, out=notor);
+   Mux(a=false, b=true, sel=notor, out=zr);
+   
+   //final value for out
+   Add16(a[0..7]=orout1, a[8..15]=orout2, b[0..15]=false, out[0..15]=out);
+   
+   // find if out is negative binary number and use for ng
+   Not16(in[0..7]=orout1, in[8..15]=orout2, out[0]=negchk, out[1]=negchk1, out[2]=negchk2, out[3]=negchk3, out[4]=negchk4, out[5]=negchk5, out[6]=negchk6, out[7]=negchk7, out[8]=negchk8, out[9]=negchk9, out[10]=negchk10, out[11]=negchk11, out[12]=negchk12, out[13]=negchk13, out[14]=negchk14, out[15]=negchk15);
+   Mux(a=true, b=false, sel=negchk, out=ng);
 }
